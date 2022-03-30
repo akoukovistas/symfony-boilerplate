@@ -75,8 +75,6 @@ COPY docker/conf/opcache.ini $PHP_INI_DIR/conf.d/docker-php-ext-opcache.ini
 
 FROM configured AS composer
 
-RUN mkdir -p -m 0600 /root/.ssh && ssh-keyscan git git.cxo.name >> /root/.ssh/known_hosts
-
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --2
 
 # -------------------
