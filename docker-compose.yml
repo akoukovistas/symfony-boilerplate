@@ -1,0 +1,52 @@
+version: '2'
+services:
+  db:
+    image: mysql:5.7
+    container_name: PROJECT_NAME-db
+    ports:
+      - 3307:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=PROJECT_NAME
+      - MYSQL_USER=potato
+      - MYSQL_PASSWORD=potato
+
+  PROJECT_NAME:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: PROJECT_NAME
+    restart: "no"
+    volumes:
+      - ./:/var/www
+    environment:
+      - APP_ENV=dev
+      - DATABASE_USER=potato
+      - DATABASE_PASSWORD=potato
+      - DATABASE_HOST=db
+      - DATABASE_PORT=3306
+      - DATABASE_NAME=PROJECT_NAME
+      - DATABASE_SERVER_VERSION=5.7
+      - MEMCACHED_HOST=memcached
+      - MEMCACHED_PORT=11211
+      - SERVER_MODE=dev
+
+  pingpos-nginx:
+    restart: "no"
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+      target: development
+    container_name: PROJECT_NAME-nginx
+    volumes:
+      - ./public:/var/www/public
+      - ./dev/sites-enabled/PROJECT_NAME.local.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8840:80"
+
+  memcached:
+    image: memcached
+    container_name: PROJECT_NAME-memcached
+    ports:
+      - "11253:11211"

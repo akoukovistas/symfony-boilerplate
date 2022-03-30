@@ -1,0 +1,8 @@
+FROM nginx:1.18-alpine AS base
+ADD docker/nginx/conf.d/* /etc/nginx/conf.d/
+
+FROM base AS development
+RUN sed -i 's/localhost/PROJECT_NAME/g' /etc/nginx/conf.d/php-fpm.include
+
+FROM base
+ADD --chown=nginx public /var/www/public
