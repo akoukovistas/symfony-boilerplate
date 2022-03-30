@@ -32,7 +32,7 @@ services:
       - MEMCACHED_PORT=11211
       - SERVER_MODE=dev
 
-  pingpos-nginx:
+  PROJECT_NAME-nginx:
     restart: "no"
     build:
       context: .
